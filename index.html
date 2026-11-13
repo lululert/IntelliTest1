@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IntelliTest · 智能试验控制系统</title>
+  <link rel="stylesheet" href="css/style.css?v=11" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">ITC</div>
+        <div class="brand-text">
+          <h1>IntelliTest</h1>
+          <p>智能试验控制系统</p>
+        </div>
+      </div>
+      <nav class="nav" id="sideNav">
+        <div class="nav-section" data-group="monitor">
+          <button type="button" class="nav-group" data-group-toggle="monitor"><span>监控</span><span class="chev">▾</span></button>
+          <div class="nav-items">
+            <button class="nav-item active" data-view="dashboard" data-tip="总览看板"><span class="ico">▣</span><span class="label">总览看板</span></button>
+            <button class="nav-item" data-view="monitor" data-tip="实时监测"><span class="ico">∿</span><span class="label">实时监测</span></button>
+            <button class="nav-item" data-view="remote" data-tip="远程控制"><span class="ico">⌘</span><span class="label">远程控制</span></button>
+          </div>
+        </div>
+
+        <div class="nav-section" data-group="device">
+          <button type="button" class="nav-group" data-group-toggle="device"><span>试验与设备</span><span class="chev">▾</span></button>
+          <div class="nav-items">
+            <button class="nav-item" data-view="control" data-tip="试验控制"><span class="ico">▶</span><span class="label">试验控制</span></button>
+            <button class="nav-item" data-view="devices" data-tip="设备互联"><span class="ico">⇄</span><span class="label">设备互联</span></button>
+            <button class="nav-item" data-view="optimize" data-tip="智能优化"><span class="ico">◎</span><span class="label">智能优化</span></button>
+          </div>
+        </div>
+
+        <div class="nav-section" data-group="data">
+          <button type="button" class="nav-group" data-group-toggle="data"><span>数据与质量</span><span class="chev">▾</span></button>
+          <div class="nav-items">
+            <button class="nav-item" data-view="data" data-tip="数据中心"><span class="ico">▤</span><span class="label">数据中心</span></button>
+            <button class="nav-item" data-view="reports" data-tip="报告中心"><span class="ico">☰</span><span class="label">报告中心</span></button>
+            <button class="nav-item" data-view="fault" data-tip="故障预警"><span class="ico">!</span><span class="label">故障预警</span></button>
+          </div>
+        </div>
+
+        <div class="nav-section" data-group="secure">
+          <button type="button" class="nav-group" data-group-toggle="secure"><span>保障</span><span class="chev">▾</span></button>
+          <div class="nav-items">
+            <button class="nav-item" data-view="security" data-tip="安全备份"><span class="ico">⬡</span><span class="label">安全备份</span></button>
+          </div>
+        </div>
+
+        <div class="nav-section" data-group="system">
+          <button type="button" class="nav-group" data-group-toggle="system"><span>系统管理</span><span class="chev">▾</span></button>
+          <div class="nav-items">
+            <button class="nav-item" data-view="users" data-tip="用户管理"><span class="ico">☺</span><span class="label">用户管理</span></button>
+            <button class="nav-item" data-view="roles" data-tip="角色管理"><span class="ico">※</span><span class="label">角色管理</span></button>
+            <button class="nav-item" data-view="depts" data-tip="部门管理"><span class="ico">⌂</span><span class="label">部门管理</span></button>
+            <button class="nav-item" data-view="menus" data-tip="菜单管理"><span class="ico">☰</span><span class="label">菜单管理</span></button>
+            <button class="nav-item" data-view="perms" data-tip="权限分配"><span class="ico">＃</span><span class="label">权限分配</span></button>
+            <button class="nav-item" data-view="dicts" data-tip="字典管理"><span class="ico">≡</span><span class="label">字典管理</span></button>
+            <button class="nav-item" data-view="configs" data-tip="系统参数"><span class="ico">⚙</span><span class="label">系统参数</span></button>
+            <button class="nav-item" data-view="notices" data-tip="消息通知"><span class="ico">✉</span><span class="label">消息通知</span></button>
+            <button class="nav-item" data-view="oplogs" data-tip="操作日志"><span class="ico">▤</span><span class="label">操作日志</span></button>
+            <button class="nav-item" data-view="loginlogs" data-tip="登录日志"><span class="ico">◎</span><span class="label">登录日志</span></button>
+            <button class="nav-item" data-view="profile" data-tip="个人中心"><span class="ico">☺</span><span class="label">个人中心</span></button>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <header class="header">
+      <div class="header-left">
+        <button class="header-menu-btn" id="btnHeaderMenu" type="button" title="折叠/展开侧边栏">
+          <span class="bars"><i></i></span>
+        </button>
+        <div>
+          <h2 id="pageTitle">总览看板</h2>
+          <span class="crumb" id="pageCrumb">IntelliTest / 总览看板</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="pill"><span class="dot" id="runStateDot"></span><span id="runStateText">待机</span></div>
+        <div class="pill" id="userPill" title="当前登录用户">—</div>
+        <button class="btn ghost" id="btnLogout" type="button">退出登录</button>
+        <div class="clock" id="clock">--</div>
+      </div>
+    </header>
+
+    <main class="main">
+      <!-- 总览 -->
+      <section class="view active" id="view-dashboard">
+        <div class="grid grid-4" style="margin-bottom:14px">
+          <div class="card kpi">
+            <div class="label">实时力值 (N)</div>
+            <div class="value" id="kpiForce">0.0</div>
+            <div class="trend up">闭环采样中</div>
+          </div>
+          <div class="card kpi">
+            <div class="label">环境温度 (°C)</div>
+            <div class="value" id="kpiTemp">25.0</div>
+            <div class="trend up">稳定</div>
+          </div>
+          <div class="card kpi">
+            <div class="label">在线设备</div>
+            <div class="value" id="kpiDevices">0/0</div>
+            <div class="trend up">互联拓扑正常</div>
+          </div>
+          <div class="card kpi">
+            <div class="label">活跃告警</div>
+            <div class="value" id="kpiAlerts">0</div>
+            <div class="trend down">含预警/故障</div>
+          </div>
+        </div>
+        <div class="grid grid-1-2">
+          <div class="card">
+            <div class="card-hd"><h3>力值实时曲线</h3><span class="meta">高频采集模拟</span></div>
+            <div class="card-bd"><div class="chart-box"><canvas id="chartDash"></canvas></div></div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><h3>最新告警</h3><span class="meta">异常识别</span></div>
+            <div class="card-bd"><div class="status-board" id="alertList"></div></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <div class="card-hd"><h3>系统运行日志</h3><span class="meta">控制 / 互联 / 备份</span></div>
+          <div class="card-bd"><div class="log" id="sysLog"></div></div>
+        </div>
+      </section>
+
+      <!-- 试验控制 -->
+      <section class="view" id="view-control">
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="card-hd"><h3>试验参数与自动控制</h3><span class="meta" id="ctrlStatus">已停止</span></div>
+            <div class="card-bd">
+              <div class="form-grid">
+                <div class="field">
+                  <label>试验类型</label>
+                  <select id="testType">
+                    <option>拉伸试验</option>
+                    <option>压缩试验</option>
+                    <option>弯曲试验</option>
+                    <option>疲劳试验</option>
+                    <option>冲击试验</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>目标力值 (N)</label>
+                  <input id="paramForce" type="number" value="120" step="1" />
+                </div>
+                <div class="field">
+                  <label>加载速度 (mm/min)</label>
+                  <input id="paramSpeed" type="number" value="2.5" step="0.1" />
+                </div>
+                <div class="field">
+                  <label>目标温度 (°C)</label>
+                  <input id="paramTemp" type="number" value="25" step="0.1" />
+                </div>
+                <div class="field">
+                  <label>采样频率 (Hz)</label>
+                  <input id="paramHz" type="number" value="200" step="10" />
+                </div>
+                <div class="field">
+                  <label>控制策略</label>
+                  <label class="switch" style="margin-top:8px">
+                    <input type="checkbox" id="autoControl" checked />
+                    <span class="track"></span>
+                    自动控制启停与反馈
+                  </label>
+                </div>
+              </div>
+              <div class="btn-row" style="margin-top:16px">
+                <button class="btn primary" id="btnStart">启动试验</button>
+                <button class="btn danger" id="btnStop">停止试验</button>
+                <button class="btn" id="btnGenReport">生成试验报告</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><h3>过程反馈说明</h3></div>
+            <div class="card-bd">
+              <div class="status-board">
+                <div class="status-row"><span class="name">数据采集</span><span class="val">力 / 位移 / 温度</span></div>
+                <div class="status-row"><span class="name">数据分析</span><span class="val">峰值 · 斜率 · 偏差</span></div>
+                <div class="status-row"><span class="name">反馈控制</span><span class="val">闭环调速 / 力限幅</span></div>
+                <div class="status-row"><span class="name">效率目标</span><span class="val">缩短人工干预</span></div>
+              </div>
+              <p style="margin:14px 0 0;font-size:13px;color:var(--text-muted);line-height:1.6">
+                对应合同：智能试验控制系统（不同类型试验自动控制、采集、分析与反馈）。
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 设备互联 -->
+      <section class="view" id="view-devices">
+        <div class="grid grid-1-2">
+          <div class="card">
+            <div class="card-hd"><h3>设备清单与通信状态</h3><span class="meta">Modbus / CANbus / Ethernet</span></div>
+            <div class="card-bd table-wrap">
+              <table class="data" id="deviceTable">
+                <thead>
+                  <tr><th>设备ID</th><th>名称</th><th>协议</th><th>地址</th><th>状态</th><th>操作</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><h3>开放接口接入</h3></div>
+            <div class="card-bd">
+              <form id="protoForm" class="form-grid" style="grid-template-columns:1fr">
+                <div class="field">
+                  <label>设备名称</label>
+                  <input id="newDeviceName" placeholder="例如：液压站控制器" required />
+                </div>
+                <div class="field">
+                  <label>通信协议</label>
+                  <select id="newProtocol">
+                    <option>Modbus</option>
+                    <option>CANbus</option>
+                    <option>Ethernet</option>
+                  </select>
+                </div>
+                <div class="btn-row">
+                  <button class="btn primary" type="submit">注册并互联</button>
+                </div>
+              </form>
+              <p style="margin:14px 0 0;font-size:13px;color:var(--text-muted);line-height:1.6">
+                对应合同：多设备互联与通信模块，保障设备协同与信息共享。
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 实时监测 -->
+      <section class="view" id="view-monitor">
+        <div class="grid grid-3">
+          <div class="card">
+            <div class="card-hd"><h3>力值</h3><span class="meta">N</span></div>
+            <div class="card-bd"><div class="chart-box"><canvas id="chartForce"></canvas></div></div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><h3>温度</h3><span class="meta">°C</span></div>
+            <div class="card-bd"><div class="chart-box"><canvas id="chartTemp"></canvas></div></div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><h3>振动</h3><span class="meta">g</span></div>
+            <div class="card-bd"><div class="chart-box"><canvas id="chartVib"></canvas></div></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <div class="card-hd"><h3>异常识别策略</h3></div>
+          <div class="card-bd">
+            <div class="status-board">
+              <div class="status-row"><span class="name">力值突变阈值</span><span class="val">±20% / 200ms</span></div>
+              <div class="status-row"><span class="name">温度漂移阈值</span><span class="val">±2°C / 1min</span></div>
+              <div class="status-row"><span class="name">总线延时阈值</span><span class="val">> 80ms 告警</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 数据中心 -->
+      <section class="view" id="view-data">
+        <div class="card">
+          <div class="card-hd">
+            <h3>历史试验数据</h3>
+            <div class="btn-row">
+              <select id="historyTypeFilter" style="background:#121820;border:1px solid var(--border);border-radius:8px;padding:7px 10px">
+                <option value="">全部类型</option>
+                <option>拉伸试验</option>
+                <option>压缩试验</option>
+                <option>弯曲试验</option>
+                <option>疲劳试验</option>
+                <option>冲击试验</option>
+              </select>
+              <button class="btn" id="btnExport">导出 CSV</button>
+            </div>
+          </div>
+          <div class="card-bd table-wrap">
+            <table class="data" id="historyTable">
+              <thead>
+                <tr><th>时间</th><th>试验类型</th><th>力值</th><th>温度</th><th>采样率</th><th>备注</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 报告中心 -->
+      <section class="view" id="view-reports">
+        <div class="card">
+          <div class="card-hd"><h3>试验报告归档</h3><span class="meta">自动生成 / 可预览</span></div>
+          <div class="card-bd table-wrap">
+            <table class="data" id="reportTable">
+              <thead>
+                <tr><th>报告编号</th><th>标题</th><th>生成时间</th><th>结论</th><th>操作</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 智能优化 -->
+      <section class="view" id="view-optimize">
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="card-hd"><h3>自动调节与优化算法</h3></div>
+            <div class="card-bd">
+              <label class="switch">
+                <input type="checkbox" id="autoOptimize" checked />
+                <span class="track"></span>
+                启用机器学习优化策略（演示）
+              </label>
+              <div class="status-board" style="margin-top:14px">
+                <div class="status-row"><span class="name">输入特征</span><span class="val">环境 · 设备状态 · 目标曲线</span></div>
+                <div class="status-row"><span class="name">输出动作</span><span class="val">力值/速度微调</span></div>
+                <div class="status-row"><span class="name">目标</span><span class="val">稳定收敛、减少超调</span></div>
+              </div>
+              <p style="margin:14px 0 0;font-size:13px;color:var(--text-muted);line-height:1.6">
+                对应合同：根据试验要求、环境变化或设备状态自动调节参数与流程。
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><h3>优化效果（示意）</h3></div>
+            <div class="card-bd">
+              <div class="status-board">
+                <div class="status-row"><span class="name">超调抑制</span><span class="val">-18%</span></div>
+                <div class="status-row"><span class="name">稳定时间</span><span class="val">-12%</span></div>
+                <div class="status-row"><span class="name">人工干预次数</span><span class="val">-35%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <div class="card-hd"><h3>调参优化日志</h3></div>
+          <div class="card-bd table-wrap">
+            <table class="data" id="optLogTable">
+              <thead>
+                <tr><th>时间</th><th>策略</th><th>调整项</th><th>调整前</th><th>调整后</th><th>原因</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 故障预警 -->
+      <section class="view" id="view-fault">
+        <div class="card">
+          <div class="card-hd"><h3>智能化故障诊断与预警</h3><span class="meta">诊断 / 预警 / 恢复</span></div>
+          <div class="card-bd table-wrap">
+            <table class="data" id="faultTable">
+              <thead>
+                <tr><th>编号</th><th>时间</th><th>标题</th><th>详情</th><th>处置</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 远程控制 -->
+      <section class="view" id="view-remote">
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="card-hd"><h3>PC 远程操控面板</h3><span class="meta" id="remoteRunLabel">已停止</span></div>
+            <div class="card-bd">
+              <label class="switch" style="margin-bottom:14px">
+                <input type="checkbox" id="remoteLock" />
+                <span class="track"></span>
+                远程锁定（防止误操作）
+              </label>
+              <div class="btn-row">
+                <button class="btn primary" id="btnRemoteStart">远程启动</button>
+                <button class="btn danger" id="btnRemoteStop">远程停止</button>
+              </div>
+              <p style="margin:14px 0 0;font-size:13px;color:var(--text-muted);line-height:1.6">
+                对应合同：通过 PC/移动终端远程查看试验状态、调整参数、启停试验。本演示为 PC Web 端。
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><h3>设备状态反馈</h3></div>
+            <div class="card-bd">
+              <div class="status-board">
+                <div class="status-row"><span class="name">控制链路</span><span class="val">WebSocket 模拟 · 正常</span></div>
+                <div class="status-row"><span class="name">指令时延</span><span class="val">28–45 ms</span></div>
+                <div class="status-row"><span class="name">回传帧率</span><span class="val">~1 Hz 指标 / 曲线刷新</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 安全备份 -->
+      <section class="view" id="view-security">
+        <div class="grid grid-3" style="margin-bottom:14px">
+          <div class="card kpi"><div class="label">传输加密</div><div class="value" style="font-size:18px">TLS 1.2+</div><div class="trend up">链路加密开启</div></div>
+          <div class="card kpi"><div class="label">存储完整性</div><div class="value" style="font-size:18px">SHA-256</div><div class="trend up">摘要校验通过</div></div>
+          <div class="card kpi"><div class="label">心跳健康度</div><div class="value" style="font-size:18px" id="kpiHealth">98%</div><div class="trend up">服务稳定</div></div>
+        </div>
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="card-hd">
+              <h3>冗余备份</h3>
+              <button class="btn primary" id="btnBackup">立即备份</button>
+            </div>
+            <div class="card-bd table-wrap">
+              <table class="data" id="backupTable">
+                <thead>
+                  <tr><th>任务</th><th>类型</th><th>状态</th><th>时间</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd">
+              <h3>容灾恢复演练</h3>
+              <button class="btn" type="button" id="btnDrill">发起演练</button>
+            </div>
+            <div class="card-bd table-wrap">
+              <table class="data" id="drillTable">
+                <thead>
+                  <tr><th>演练编号</th><th>场景</th><th>结果</th><th>时间</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <div class="card-hd"><h3>权限与审计（在线会话）</h3></div>
+          <div class="card-bd table-wrap">
+            <table class="data" id="auditTable">
+              <thead>
+                <tr><th>账号</th><th>角色</th><th>最近活动</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 用户管理 -->
+      <section class="view" id="view-users">
+        <div class="card">
+          <div class="card-hd">
+            <h3>用户管理</h3>
+            <div class="btn-row">
+              <button class="btn primary" type="button" id="btnAddUser">新增用户</button>
+            </div>
+          </div>
+          <div class="card-bd table-wrap">
+            <table class="data" id="userManageTable">
+              <thead>
+                <tr>
+                  <th>账号</th><th>姓名</th><th>角色</th><th>手机号</th><th>状态</th><th>最近登录</th><th>操作</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 角色管理 -->
+      <section class="view" id="view-roles">
+        <div class="card">
+          <div class="card-hd">
+            <h3>角色管理</h3>
+            <div class="btn-row">
+              <button class="btn primary" type="button" id="btnAddRole">新增角色</button>
+            </div>
+          </div>
+          <div class="card-bd table-wrap">
+            <table class="data" id="roleManageTable">
+              <thead>
+                <tr>
+                  <th>角色编码</th><th>角色名称</th><th>备注</th><th>状态</th><th>用户数</th><th>操作</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 菜单管理 -->
+      <section class="view" id="view-menus">
+        <div class="card">
+          <div class="card-hd">
+            <h3>菜单管理</h3>
+            <div class="btn-row">
+              <button class="btn primary" type="button" id="btnAddMenu">新增菜单</button>
+            </div>
+          </div>
+          <div class="card-bd table-wrap">
+            <table class="data" id="menuManageTable">
+              <thead>
+                <tr>
+                  <th>菜单名称</th><th>类型</th><th>路由/标识</th><th>排序</th><th>可见</th><th>操作</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 权限分配 -->
+      <section class="view" id="view-perms">
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="card-hd"><h3>选择角色</h3></div>
+            <div class="card-bd">
+              <div class="field">
+                <label>角色</label>
+                <select id="permRoleSelect"></select>
+              </div>
+              <p style="margin:12px 0 0;font-size:13px;color:var(--text-muted);line-height:1.6">
+                勾选该角色可访问的菜单，点击保存后生效（本地演示）。
+              </p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd">
+              <h3>菜单权限</h3>
+              <button class="btn primary" type="button" id="btnSavePerms">保存权限</button>
+            </div>
+            <div class="card-bd" id="permMenuTree"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 部门管理 -->
+      <section class="view" id="view-depts">
+        <div class="card">
+          <div class="card-hd">
+            <h3>部门管理</h3>
+            <button class="btn primary" type="button" id="btnAddDept">新增部门</button>
+          </div>
+          <div class="card-bd table-wrap">
+            <table class="data" id="deptTable">
+              <thead>
+                <tr><th>部门编码</th><th>部门名称</th><th>负责人</th><th>排序</th><th>状态</th><th>操作</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 字典管理 -->
+      <section class="view" id="view-dicts">
+        <div class="card">
+          <div class="card-hd">
+            <h3>字典管理</h3>
+            <button class="btn primary" type="button" id="btnAddDict">新增字典项</button>
+          </div>
+          <div class="card-bd table-wrap">
+            <table class="data" id="dictTable">
+              <thead>
+                <tr><th>字典类型</th><th>字典标签</th><th>字典值</th><th>排序</th><th>状态</th><th>操作</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 系统参数 -->
+      <section class="view" id="view-configs">
+        <div class="card">
+          <div class="card-hd">
+            <h3>系统参数</h3>
+            <button class="btn primary" type="button" id="btnAddConfig">新增参数</button>
+          </div>
+          <div class="card-bd table-wrap">
+            <table class="data" id="configTable">
+              <thead>
+                <tr><th>参数键</th><th>参数值</th><th>说明</th><th>操作</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 消息通知 -->
+      <section class="view" id="view-notices">
+        <div class="card">
+          <div class="card-hd">
+            <h3>消息通知</h3>
+            <button class="btn primary" type="button" id="btnAddNotice">发布通知</button>
+          </div>
+          <div class="card-bd table-wrap">
+            <table class="data" id="noticeTable">
+              <thead>
+                <tr><th>标题</th><th>类型</th><th>发布时间</th><th>状态</th><th>操作</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 操作日志 -->
+      <section class="view" id="view-oplogs">
+        <div class="card">
+          <div class="card-hd">
+            <h3>操作日志</h3>
+            <button class="btn" type="button" id="btnClearOpLogs">清空</button>
+          </div>
+          <div class="card-bd table-wrap">
+            <table class="data" id="opLogTable">
+              <thead>
+                <tr><th>时间</th><th>操作人</th><th>模块</th><th>动作</th><th>结果</th><th>IP</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 登录日志 -->
+      <section class="view" id="view-loginlogs">
+        <div class="card">
+          <div class="card-hd"><h3>登录日志</h3></div>
+          <div class="card-bd table-wrap">
+            <table class="data" id="loginLogTable">
+              <thead>
+                <tr><th>时间</th><th>账号</th><th>结果</th><th>IP</th><th>客户端</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 个人中心 -->
+      <section class="view" id="view-profile">
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="card-hd"><h3>基本信息</h3></div>
+            <div class="card-bd">
+              <div class="form-grid">
+                <div class="field"><label>账号</label><input id="profileUser" disabled /></div>
+                <div class="field"><label>姓名</label><input id="profileName" /></div>
+                <div class="field"><label>角色</label><input id="profileRole" disabled /></div>
+                <div class="field"><label>手机号</label><input id="profileMobile" /></div>
+              </div>
+              <div class="btn-row" style="margin-top:14px">
+                <button class="btn primary" type="button" id="btnSaveProfile">保存资料</button>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><h3>修改密码</h3></div>
+            <div class="card-bd">
+              <div class="form-grid" style="grid-template-columns:1fr">
+                <div class="field"><label>原密码</label><input id="profileOldPwd" type="password" /></div>
+                <div class="field"><label>新密码</label><input id="profileNewPwd" type="password" /></div>
+                <div class="field"><label>确认新密码</label><input id="profileNewPwd2" type="password" /></div>
+              </div>
+              <div class="btn-row" style="margin-top:14px">
+                <button class="btn primary" type="button" id="btnChangePwd">修改密码</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-mask" id="sysModal" hidden>
+    <div class="modal">
+      <div class="modal-hd">
+        <h3 id="sysModalTitle">编辑</h3>
+        <button class="btn ghost" type="button" id="sysModalClose">关闭</button>
+      </div>
+      <div class="modal-bd" id="sysModalBody"></div>
+      <div class="modal-ft">
+        <button class="btn" type="button" id="sysModalCancel">取消</button>
+        <button class="btn primary" type="button" id="sysModalOk">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-wrap" id="toastWrap"></div>
+  <script src="js/auth.js?v=6"></script>
+  <script src="js/app.js?v=6"></script>
+  <script src="js/sys-extra.js?v=2"></script>
+</body>
+</html>

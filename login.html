@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login · IntelliTest</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/login.css" />
+</head>
+<body class="login-body">
+  <div class="login-bg"></div>
+  <div class="login-shell">
+    <section class="login-hero">
+      <div class="login-hero-inner">
+        <div class="brand-mark lg">ITC</div>
+        <h1>IntelliTest</h1>
+        <p>Intelligent Test Machine &amp; Equipment Control Platform</p>
+        <ul>
+          <li>试验自动控制与过程反馈</li>
+          <li>多设备互联 · Modbus / CAN / Ethernet</li>
+          <li>实时监测、报告生成与故障预警</li>
+          <li>远程操控与数据安全备份</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="login-panel">
+      <div class="login-card">
+        <h2>管理端登录</h2>
+        <p class="sub">请使用授权账号进入 PC 管理平台</p>
+
+        <form id="loginForm" autocomplete="on">
+          <div class="field">
+            <label for="username">账号</label>
+            <input id="username" name="username" type="text" placeholder="请输入账号" value="admin" required />
+          </div>
+          <div class="field">
+            <label for="password">密码</label>
+            <input id="password" name="password" type="password" placeholder="请输入密码" value="admin123" required />
+          </div>
+          <div class="login-extra">
+            <label class="remember">
+              <input type="checkbox" id="remember" checked />
+              记住账号
+            </label>
+            <span class="hint">演示账号见下方</span>
+          </div>
+          <button class="btn primary login-btn" type="submit" id="loginBtn">登 录</button>
+          <div class="login-error" id="loginError" hidden></div>
+        </form>
+
+        <div class="demo-box">
+          <div class="demo-title">演示账号</div>
+          <div class="demo-row"><span>管理员</span><code>admin / admin123</code></div>
+          <div class="demo-row"><span>操作员</span><code>ops01 / ops123</code></div>
+          <div class="demo-row"><span>审核员</span><code>qa02 / qa123</code></div>
+        </div>
+      </div>
+      <p class="login-foot">IntelliTest · Demo Build</p>
+    </section>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>
