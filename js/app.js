@@ -1115,7 +1115,12 @@
   }
 
   function init() {
-    if (window.ITCAuth && !ITCAuth.requireAuth()) return;
+    // 未登录或鉴权脚本异常：一律进登录页，禁止直接进首页
+    if (!window.ITCAuth) {
+      location.replace("login.html?redirect=" + encodeURIComponent("index.html"));
+      return;
+    }
+    if (!ITCAuth.requireAuth()) return;
     bindAuthUi();
     bindSidebarToggle();
     bindNav();

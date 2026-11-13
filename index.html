@@ -4,7 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IntelliTest · 智能试验控制系统</title>
-  <link rel="stylesheet" href="css/style.css?v=11" />
+  <style>html.itc-auth-wait body{visibility:hidden!important}</style>
+  <script>
+    /* 未登录禁止进入 index：尽早校验会话并跳转登录页 */
+    (function () {
+      document.documentElement.classList.add("itc-auth-wait");
+      function goLogin() {
+        location.replace("login.html?redirect=" + encodeURIComponent("index.html"));
+      }
+      try {
+        var raw = sessionStorage.getItem("itc_auth_session") || localStorage.getItem("itc_auth_session");
+        if (!raw) {
+          goLogin();
+          return;
+        }
+        var user = JSON.parse(raw);
+        if (!user || !user.username) {
+          sessionStorage.removeItem("itc_auth_session");
+          localStorage.removeItem("itc_auth_session");
+          goLogin();
+          return;
+        }
+        document.documentElement.classList.remove("itc-auth-wait");
+      } catch (e) {
+        try {
+          sessionStorage.removeItem("itc_auth_session");
+          localStorage.removeItem("itc_auth_session");
+        } catch (e2) {}
+        goLogin();
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="css/style.css?v=13" />
 </head>
 <body>
   <div class="app">
@@ -697,8 +728,8 @@
   </div>
 
   <div class="toast-wrap" id="toastWrap"></div>
-  <script src="js/auth.js?v=6"></script>
-  <script src="js/app.js?v=6"></script>
-  <script src="js/sys-extra.js?v=2"></script>
+  <script src="js/auth.js?v=8"></script>
+  <script src="js/app.js?v=8"></script>
+  <script src="js/sys-extra.js?v=4"></script>
 </body>
 </html>

@@ -14,8 +14,16 @@
     try {
       var raw = sessionStorage.getItem(STORAGE_KEY) || localStorage.getItem(STORAGE_KEY);
       if (!raw) return null;
-      return JSON.parse(raw);
+      var user = JSON.parse(raw);
+      if (!user || !user.username) {
+        clearSession();
+        return null;
+      }
+      return user;
     } catch (e) {
+      try {
+        clearSession();
+      } catch (e2) {}
       return null;
     }
   }
@@ -86,8 +94,13 @@
 
   function requireAuth() {
     if (!isLoggedIn()) {
-      var next = encodeURIComponent(location.pathname.split("/").pop() || "index.html");
-      location.replace("login.html?redirect=" + next);
+      var file = "index.html";
+      try {
+        var parts = String(location.pathname || "").split(/[/\\]/);
+        var last = parts[parts.length - 1] || "";
+        if (/\.html$/i.test(last)) file = last;
+      } catch (e) {}
+      location.replace("login.html?redirect=" + encodeURIComponent(file));
       return false;
     }
     return true;
